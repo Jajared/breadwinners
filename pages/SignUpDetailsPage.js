@@ -17,7 +17,6 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
     Name: "",
     EmailAddress: route.params.EmailAddress,
     UserType: "",
-    Location: "",
   });
 
   function handleSubmit() {
@@ -26,9 +25,6 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
       return false;
     } else if (personalDetails.UserType.trim() == "") {
       alert("Please choose a specific User Tyoe");
-      return false;
-    } else if (personalDetails.Location.trim() == "") {
-      alert("Please enter the location");
       return false;
     } else {
       return true;
@@ -57,7 +53,7 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
     }
 
     if (handleSubmit() == true) {
-      await setIsSignUpComplete(true)
+      await setIsSignUpComplete(true);
       navigation.navigate("Home");
     }
   };
@@ -71,10 +67,6 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
         <View style={styles.inputItem}>
           <Text style={styles.inputTitle}>Name</Text>
           <TextInput style={styles.inputBox} value={personalDetails.Name} placeholder="Name" onChangeText={(text) => setPersonalDetails({ ...personalDetails, Name: text })}></TextInput>
-        </View>
-        <View style={styles.inputItem}>
-          <Text style={styles.inputTitle}>Location</Text>
-          <TextInput style={styles.inputBox} value={personalDetails.Location} placeholder="Location" onChangeText={(text) => setPersonalDetails({ ...personalDetails, Location: text })}></TextInput>
         </View>
         <View style={styles.inputItem}>
           <Text style={styles.inputTitle}>User type</Text>

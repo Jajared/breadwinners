@@ -1,10 +1,11 @@
-import { StyleSheet, View, ActivityIndicator, Platform } from "react-native";
-import { useState, useEffect, useRef } from "react";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { useState, useRef } from "react";
 import HomeScreenBusiness from "./pages/HomeScreenBusiness";
 import HomeScreenCustomer from "./pages/HomeScreenCustomer";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddFoodDetails from "./pages/AddFoodDetails";
+import FoodDetail from "./pages/FoodDetail";
 import MenuPage from "./pages/MenuPage";
 import UpdateAccountPage from "./pages/UpdateAccountPage";
 import { UserInformation, FoodItem } from "./utils/types";
@@ -218,6 +219,9 @@ export default function App() {
           <Stack.Screen name="Home" options={{ headerShown: false }}>
             {(props) => <HomeScreenCustomer {...props} allFoodItems={allFoodItems} userName={userInformation.Name} refreshData={() => {}} userType={"Customer"} foodItemAction={favouriteFoodItem} />}
           </Stack.Screen>
+          <Stack.Screen name="Food Details" options={{ headerShown: false }}>
+            {(props) => <FoodDetail {...props} />}
+          </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -230,7 +234,7 @@ export default function App() {
               {(props) => <HomeScreenBusiness {...props} allFoodItems={allFoodItems} userName={userInformation.Name} userType={userInformation.UserType} foodItemAction={deleteFoodItem} />}
             </Stack.Screen>
             <Stack.Screen name="Add Food Details" options={{ headerShown: false }}>
-              {(props) => <AddFoodDetails {...props} addFoodItem={addFoodItem} establishmentName={userInformation.Name} userlocation={userInformation.Location} />}
+              {(props) => <AddFoodDetails {...props} addFoodItem={addFoodItem} establishmentName={userInformation.Name} />}
             </Stack.Screen>
             <Stack.Screen name="Profile Page" options={{ headerShown: false }}>
               {(props) => <MenuPage {...props} userInformation={userInformation} onSignOut={handleSignOut} />}
@@ -271,6 +275,9 @@ export default function App() {
             </Stack.Screen>
             <Stack.Screen name="Sign Up Details" options={{ headerShown: false }}>
               {(props) => <SignUpDetailsPage {...props} setIsSignUpComplete={handleSignUpComplete} />}
+            </Stack.Screen>
+            <Stack.Screen name="Food Details" options={{ headerShown: false }}>
+              {(props) => <FoodDetail {...props} />}
             </Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>

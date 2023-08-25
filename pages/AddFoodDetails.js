@@ -1,5 +1,5 @@
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput, Button, StatusBar } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BackNavBar from "../components/BackNavBar/BackNavBar";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CustomButton from "../components/Buttons/CustomButton";
@@ -9,13 +9,27 @@ import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { storage } from "../firebaseConfig";
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import * as Location from "expo-location";
 
-export default function AddFoodDetails({ navigation, route, establishmentName, addFoodItem, userlocation }) {
-  const [state, setState] = useState({ itemId: uuid.v4(), establishmentId: "1", establishmentName: establishmentName, location: userlocation, foodName: "", timeOfPost: 540, stillAvailable: true, dietaryRestriction: "", pictureURL: "" });
+export default function AddFoodDetails({ navigation, route, establishmentName, addFoodItem }) {
+  const [state, setState] = useState({ itemId: uuid.v4(), establishmentId: "1", establishmentName: establishmentName, foodName: "", timeOfPost: 540, stillAvailable: true, dietaryRestriction: "", pictureURL: "", latitude: 0, longitude: 0 });
   const [date, setDate] = useState(new Date(2023, 1, 1, 9, 0, 0));
   const [selectedCheck, setSelectedCheck] = useState([]);
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setState((prevState) => ({ ...prevState, latitude: location.coords.latitude, longitude: location.coords.longitude }));
+    })();
+  }, []);
+
   const handleCheckSelection = (check) => {
     const dietaryRestrictionOptions = {
       1: "Halal",

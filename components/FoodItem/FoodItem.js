@@ -1,6 +1,5 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity, Animated } from "react-native";
-import { Swipeable } from "react-native-gesture-handler";
 import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
 import TextTicker from "react-native-text-ticker";
 
@@ -8,20 +7,6 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
   const foodData = props.item;
   const imageURL = foodData.pictureURL;
   const placeholder = userType === "Establishment" ? "Mark as unavailable" : "Favourite";
-  const rightActions = (progress, dragX) => {
-    const scale = dragX.interpolate({
-      inputRange: [-50, 0],
-      outputRange: [1, 0],
-      extrapolate: "clamp",
-    });
-    return (
-      <TouchableOpacity onPress={() => foodItemAction(foodData.itemId)}>
-        <View style={styles.rightAction}>
-          <Animated.Text style={[styles.actionText, { transform: [{ scale }] }]}>{placeholder}</Animated.Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
 
   function getTime() {
     const time = foodData.timeOfPost;
@@ -29,10 +14,9 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
     date.setHours(Math.floor(time / 60), time % 60);
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
   }
-
   return (
     <SafeAreaView style={styles.container}>
-      <Swipeable renderRightActions={rightActions}>
+      <TouchableOpacity onPress={() => navigation.navigate("Food Details", { foodItem: props.item })}>
         <View style={styles.itemContainer}>
           <View style={styles.imageContainer}>
             <Image source={{ uri: imageURL }} style={styles.image} />
@@ -42,7 +26,7 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
               <Entypo name="location-pin" size={20} color="black" style={{ flex: 1 }} />
               <View style={{ flex: 5 }}>
                 <TextTicker style={{ fontWeight: "bold", fontSize: 18 }} duration={3000} loop bounceDelay={50} repeatSpacer={50} marqueeDelay={1000}>
-                  {foodData.establishmentName}, {foodData.location}
+                  {foodData.establishmentName}
                 </TextTicker>
               </View>
             </View>
@@ -60,7 +44,7 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
             </View>
           </View>
         </View>
-      </Swipeable>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
